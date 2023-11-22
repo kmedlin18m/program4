@@ -1,0 +1,109 @@
+# Kirsten Medlin
+# 11/17/23
+# Program 4
+
+import sys
+
+def main():
+    # Command line error checking
+    if len(sys.argv) != 6:
+        print("ERROR: Incorrect usage. Correct usuage: [input file] [frame size] [frame size] [frame size] [frame size]")
+        sys.exit(1)
+    
+    file = sys.argv[1]
+    frame1 = int(sys.argv[2])
+    frame2 = int(sys.argv[3])
+    frame3 = int(sys.argv[4])
+    frame4 = int(sys.argv[5])
+
+    input_file_list = []
+
+    # Dictionaries to store information about each process
+    processes = {1: [], 2: [], 3: [], 4: []}
+    hits = {1: 0, 2: 0, 3: 0, 4: 0}
+    accesses = {1: 0 , 2: 0, 3: 0, 4: 0}
+
+    #print(f"Process 1: {frame1} frames, Process 2: {frame2} frames, Process 3: {frame3} frames, Process 4: {frame4} frames,")
+
+    # Process input file
+    # I am making a list of tuples where each tuple is a pair of numbers, the process and the number
+    with open(file, 'r') as file:
+        for line in file:
+            pair = line.split()
+            input_file_list.append((int(pair[0]), int(pair[1])))
+
+    for process, number in input_file_list:
+        if process == 1:
+            #print(processes[1])
+            accesses[1] += 1
+            if number in processes[1]:
+                #print(f"Process 1 hit: {number}")
+                hits[1] += 1
+                # For LRU algorithm, the hit number needs to be moved to the end since it was just used
+                processes[1].remove(number)
+                processes[1].append(number)
+            else:
+                # If the process frame is too large, remove least recently used element (first in queue)
+                if len(processes[1]) >= frame1:
+                    processes[1].pop(0)
+                #print(f"Process 1 miss: {number}")
+                processes[1].append(number)
+    
+        if process == 2:
+            accesses[2] += 1
+            if number in processes[2]:
+                #print(f"Process 2 hit: {number}")
+                hits[2] += 1
+                # For LRU algorithm, the hit number needs to be moved to the end since it was just used
+                processes[2].remove(number)
+                processes[2].append(number)
+            else:
+                # If the process frame is too large, remove least recently used element (first in queue)
+                if len(processes[2]) >= frame2:
+                    processes[2].pop(0)
+                #print(f"Process 2 miss: {number}")
+                processes[2].append(number)
+        if process == 3:
+            accesses[3] += 1
+            if number in processes[3]:
+                #print(f"Process 3 hit: {number}")
+                hits[3] += 1
+                # For LRU algorithm, the hit number needs to be moved to the end since it was just used
+                processes[3].remove(number)
+                processes[3].append(number)
+            else:
+                # If the process frame is too large, remove least recently used element (first in queue)
+                if len(processes[3]) >= frame3:
+                    processes[3].pop(0)
+                #print(f"Process 3 miss: {number}")
+                processes[3].append(number)
+        if process == 4:
+            accesses[4] += 1
+            if number in processes[4]:
+                #print(f"Process 4 hit: {number}")
+                hits[4] += 1
+                # For LRU algorithm, the hit number needs to be moved to the end since it was just used
+                processes[4].remove(number)
+                processes[4].append(number)
+            else:
+                # If the process frame is too large, remove least recently used element (first in queue)
+                if len(processes[4]) >= frame4:
+                    processes[4].pop(0)
+                #print(f"Process 1 miss: {number}")
+                processes[4].append(number)
+
+    # Calculate
+    p1_rate = (hits[1]/accesses[1]) * 100
+    print(f"Process 1: {p1_rate:.2f}%")
+    p2_rate = (hits[2]/accesses[2]) * 100
+    print(f"Process 2: {p2_rate:.2f}%")
+    p3_rate = (hits[3]/accesses[3]) * 100
+    print(f"Process 3: {p3_rate:.2f}%")
+    p4_rate = (hits[4]/accesses[4]) * 100
+    print(f"Process 3: {p4_rate:.2f}%")
+    avg = (p1_rate + p2_rate + p3_rate + p4_rate) / 4
+    print(f"Average: {avg:.2f}%")
+
+if __name__ == "__main__":
+    main()
+    
